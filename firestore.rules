@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function owner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function validProfile(uid) {
+      let data = request.resource.data;
+      return data.keys().hasAll(['uid', 'displayName', 'email', 'photoUrl', 'createdAt', 'lastLoginAt'])
+        && data.keys().hasOnly(['uid', 'displayName', 'email', 'photoUrl', 'createdAt', 'lastLoginAt'])
+        && data.uid is string && data.uid == uid
+        && data.email is string && data.email.size() > 0 && data.email.size() <= 320
+        && data.email == request.auth.token.email
+        && (data.displayName == null || (data.displayName is string && data.displayName.size() <= 200))
+        && (data.photoUrl == null || (data.photoUrl is string && data.photoUrl.size() <= 2048 && data.photoUrl.matches('https://.+')))
+        && data.createdAt is timestamp && data.lastLoginAt is timestamp
+        && data.lastLoginAt == request.time && data.lastLoginAt >= data.createdAt;
+    }
+
+    match /users/{uid} {
+      allow get: if owner(uid);
+      allow list: if false;
+      allow create: if owner(uid) && validProfile(uid) && request.resource.data.createdAt == request.time;
+      allow update: if owner(uid) && validProfile(uid)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

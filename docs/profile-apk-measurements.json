@@ -1,0 +1,52 @@
+{
+  "verified_date": "2026-10-20",
+  "baseline_debug_bytes": 201832403,
+  "build_number": 5,
+  "firebase_configuration_bundled": true,
+  "fingerprints_saved_in_firebase": "SHA-1 and SHA-256 verified during earlier configuration troubleshooting",
+  "previous_installed_app_user_report": "PASSED: user reports successful Google login and workspace access on 20 October 2026; APK build number not independently confirmed",
+  "build_5_device_installation_and_launch": "NOT TESTED",
+  "build_5_native_back_gesture": "NOT TESTED on Android; simulated system Back passed in widget tests",
+  "flutter_tests_passed": 47,
+  "navigation_regression_tests_added": 9,
+  "profile_apks": [
+    {
+      "file": "build/app/outputs/flutter-apk/app-arm64-v8a-profile.apk",
+      "phone_test_file": "build/deliverables/Hyner-build5-arm64.apk",
+      "bytes": 34408625,
+      "sha256": "0475081fe8413155bffb27c880093eaae458470ed9b8e4debf1b33679f70431f",
+      "abi": "arm64-v8a",
+      "package": "com.example.hyner",
+      "version_code": 2005,
+      "version_name": "1.0.0",
+      "signature_verified": true,
+      "signing_sha1_matches_supplied_fingerprint": true,
+      "native_firebase_configuration_matches": true,
+      "compiled_dart_firebase_configuration_matches": true,
+      "aot": true,
+      "dart_debug_kernel": false,
+      "vulkan_debug_validation_layer": false,
+      "material_icons_uncompressed_bytes": 5536,
+      "reduction_percent": 82.95
+    },
+    {
+      "file": "build/app/outputs/flutter-apk/app-armeabi-v7a-profile.apk",
+      "phone_test_file": "build/deliverables/Hyner-build5-arm32.apk",
+      "bytes": 31967099,
+      "sha256": "ed3b0bf8cd7f4c1cd727a092f5a4232eee37b188d945e22a6a022f2c12b6c5cf",
+      "abi": "armeabi-v7a",
+      "package": "com.example.hyner",
+      "version_code": 1005,
+      "version_name": "1.0.0",
+      "signature_verified": true,
+      "signing_sha1_matches_supplied_fingerprint": true,
+      "native_firebase_configuration_matches": true,
+      "compiled_dart_firebase_configuration_matches": true,
+      "aot": true,
+      "dart_debug_kernel": false,
+      "vulkan_debug_validation_layer": false,
+      "material_icons_uncompressed_bytes": 5536,
+      "reduction_percent": 84.16
+    }
+  ]
+}

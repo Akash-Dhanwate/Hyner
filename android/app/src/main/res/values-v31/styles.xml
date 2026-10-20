@@ -1,0 +1,7 @@
+<resources>
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowSplashScreenBackground">@color/hyner_splash</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/hyner_mark</item>
+        <item name="android:windowBackground">@color/hyner_splash</item>
+    </style>
+</resources>

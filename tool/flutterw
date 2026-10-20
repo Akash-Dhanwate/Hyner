@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+if command -v flutter >/dev/null 2>&1; then
+  exec flutter "$@"
+fi
+if [ -x /Users/akash/develop/flutter/bin/flutter ]; then
+  exec /Users/akash/develop/flutter/bin/flutter "$@"
+fi
+printf '%s\n' 'Flutter was not found. Install the stable Flutter SDK and add its bin directory to PATH.' >&2
+exit 1

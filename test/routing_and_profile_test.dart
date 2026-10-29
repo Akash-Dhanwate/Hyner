@@ -14,7 +14,12 @@ void main() {
       for (final path in [
         '/dashboard',
         '/inventory',
+        '/inventory/add',
+        '/inventory/TEST-1',
+        '/inventory/TEST-1/edit',
         '/sales',
+        '/sales/history',
+        '/sales/new',
         '/purchases',
         '/customers',
         '/reports',

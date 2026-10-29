@@ -7,19 +7,61 @@ class PageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SafeArea(
     top: false,
-    child: SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 36),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 760),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: children,
-          ),
+    child: Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 760),
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 36),
+              sliver: SliverList(delegate: SliverChildListDelegate(children)),
+            ),
+          ],
         ),
       ),
     ),
   );
+}
+
+/// A vertically scrolling page whose body is composed from lazy slivers.
+/// Use this for registers that may grow so Flutter only builds visible rows.
+class SliverPageContent extends StatelessWidget {
+  const SliverPageContent({
+    super.key,
+    required this.header,
+    required this.slivers,
+    this.onRefresh,
+  });
+
+  final Widget header;
+  final List<Widget> slivers;
+  final Future<void> Function()? onRefresh;
+
+  @override
+  Widget build(BuildContext context) {
+    final scrollView = CustomScrollView(
+      physics: onRefresh == null ? null : const AlwaysScrollableScrollPhysics(),
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+          sliver: SliverToBoxAdapter(child: header),
+        ),
+        ...slivers,
+        const SliverToBoxAdapter(child: SizedBox(height: 36)),
+      ],
+    );
+    return SafeArea(
+      top: false,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 760),
+          child: onRefresh == null
+              ? scrollView
+              : RefreshIndicator(onRefresh: onRefresh!, child: scrollView),
+        ),
+      ),
+    );
+  }
 }
 
 class Eyebrow extends StatelessWidget {

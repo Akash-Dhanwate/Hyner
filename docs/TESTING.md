@@ -1,4 +1,41 @@
-# Phase 1 verification
+# Hyner verification
+
+## Current local-first checkpoint — 27 October 2026
+
+Products, stock movements, customers, suppliers, purchases, purchase returns,
+bills, payment status, UPI settings and reports now use account-scoped SQLite
+databases on-device. The app attempts a one-time read-only import of legacy
+Firestore products and stock history. Bill writes do not use Cloud Functions.
+UPI QR codes prefill the INR bill amount; payment receipt is checked manually
+in the owner's UPI app.
+
+Flutter analysis completed with no issues. The ARM64 profile APK
+`build/deliverables/Hyner-build2011-arm64.apk` built successfully as version
+1.3.3 / Android version code 4011; package, ABI and matching debug signature
+were checked against build 9. **NOT RUN in this change:** unit or widget tests,
+physical installation, legacy import against the live project, or an end-to-end
+UPI scan/payment. Build 9 is the previous cloud-checkout build. See
+`PHASE_3_SALES.md`, `PHASE_3_SETUP.md` and `PHASE_4_PURCHASES_REPORTS.md`.
+
+## Historical Phase 2 checkpoint — 23 October 2026
+
+**PASSED:** all 80 Flutter unit/widget tests, 51 Firestore emulator tests,
+static analysis, five fixture-based UI renders, and ARM64/ARM32 profile APK
+builds. Signatures, version 1.1.0/build 6, native/Dart Firebase values, ABI
+contents and copied hashes were checked. No dependencies were added/upgraded.
+
+**NOT TESTED:** publishing the updated rules, enabling both live indexes,
+native Flutter Inventory operations against the live project, build-6 phone
+installation, restart persistence of real products, and real gesture/performance
+behavior. The rules tests use the web SDK against Google's isolated emulator;
+the UI/controller tests use isolated repositories. Neither is a native Android
+adapter integration test. Index existence is not enforced by the emulator.
+
+See `PHASE_2_RESULTS.md` and `PHASE_2_SETUP.md` for the current acceptance checklist.
+No screen access or live data writes were performed. The owner authorized Phase 2
+based on the working installed app; older untested checks below remain untested.
+
+## Historical Phase 1 checkpoint
 
 Updated: 20 October 2026. Platform: Apple Silicon macOS. Flutter 3.47.7 stable,
 Dart 3.13.5, Java 21, Node 26.7.0. Android minimum API 24 / target API 36.
@@ -120,13 +157,16 @@ No physical device or emulator was started for this navigation change. The
 user's screen was not accessed. Historical Python/rules/audit/rendering results
 above were not rerun for this Dart-only change.
 
-## Device test procedure after Firebase setup
+## Historical Phase 1 device test procedure — build 5
 
 Prerequisites: complete `SETUP.md`, publish the rules to the intended project,
 install a configured APK, and use an Android device or a Google Play-enabled
-emulator. Current phone copies are `build/deliverables/Hyner-build5-arm64.apk`
-and `build/deliverables/Hyner-build5-arm32.apk`. Use separate Google accounts for account-isolation testing. Do not use
-production business data for acceptance tests.
+emulator. The historical build-5 copies are
+`build/deliverables/Hyner-build5-arm64.apk` and
+`build/deliverables/Hyner-build5-arm32.apk`. For current Sales phone acceptance,
+use build 9 and follow `PHASE_3_SETUP.md`. Use separate Google accounts for
+account-isolation testing. Do not use production business data for acceptance
+tests.
 
 ### First-time sign-in and creation
 

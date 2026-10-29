@@ -5,16 +5,26 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/session_controller.dart';
 import '../../features/auth/presentation/sign_in_screen.dart';
 import '../../features/customers/presentation/customers_screen.dart';
+import '../../features/customers/presentation/customer_detail_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
+import '../../features/expenses/presentation/expenses_screen.dart';
 import '../../features/inventory/presentation/inventory_screen.dart';
+import '../../features/inventory/presentation/product_detail_screen.dart';
+import '../../features/inventory/presentation/product_editor_screen.dart';
 import '../../features/onboarding/presentation/splash_screen.dart';
 import '../../features/onboarding/presentation/welcome_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/purchases/presentation/purchase_detail_screen.dart';
+import '../../features/purchases/presentation/purchase_editor_screen.dart';
 import '../../features/purchases/presentation/purchases_screen.dart';
 import '../../features/reports/presentation/reports_screen.dart';
 import '../../features/sales/presentation/sales_screen.dart';
+import '../../features/sales/presentation/sale_editor_screen.dart';
+import '../../features/sales/presentation/sale_detail_screen.dart';
+import '../../features/sales/presentation/remaining_payments_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/workspace/presentation/workspace_shell.dart';
+import '../../features/whatsapp/presentation/whatsapp_screen.dart';
 
 String? sessionRedirect(SessionState session, String path) {
   final public = path == '/welcome' || path == '/sign-in';
@@ -68,10 +78,58 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       _page('/dashboard', const DashboardScreen()),
       _page('/inventory', const InventoryScreen()),
-      _page('/sales', const SalesScreen()),
+      GoRoute(
+        path: '/inventory/add',
+        builder: (context, state) => const ProductEditorScreen(),
+      ),
+      GoRoute(
+        path: '/inventory/:sku/edit',
+        builder: (context, state) =>
+            ProductEditorScreen(sku: state.pathParameters['sku']!),
+      ),
+      GoRoute(
+        path: '/inventory/:sku',
+        builder: (context, state) => WorkspaceShell(
+          location: '/inventory',
+          child: ProductDetailScreen(sku: state.pathParameters['sku']!),
+        ),
+      ),
+      _page('/sales', const SaleEditorScreen(embedded: true)),
+      _page('/sales/history', const SalesScreen()),
+      _page('/sales/remaining', const RemainingPaymentsScreen()),
+      GoRoute(
+        path: '/sales/new',
+        builder: (context, state) => SaleEditorScreen(
+          customerId: state.uri.queryParameters['customerId'],
+        ),
+      ),
+      GoRoute(
+        path: '/sales/:id',
+        builder: (context, state) => WorkspaceShell(
+          location: '/sales',
+          child: SaleDetailScreen(id: state.pathParameters['id']!),
+        ),
+      ),
       _page('/purchases', const PurchasesScreen()),
+      _page('/expenses', const ExpensesScreen()),
+      _page('/purchases/new', const PurchaseEditorScreen()),
+      GoRoute(
+        path: '/purchases/:id',
+        builder: (context, state) => WorkspaceShell(
+          location: '/purchases',
+          child: PurchaseDetailScreen(id: state.pathParameters['id']!),
+        ),
+      ),
       _page('/customers', const CustomersScreen()),
+      GoRoute(
+        path: '/customers/:id',
+        builder: (context, state) => WorkspaceShell(
+          location: '/customers',
+          child: CustomerDetailScreen(id: state.pathParameters['id']!),
+        ),
+      ),
       _page('/reports', const ReportsScreen()),
+      _page('/whatsapp', const WhatsAppScreen()),
       _page('/settings', const SettingsScreen()),
       _page('/profile', const ProfileScreen()),
     ],

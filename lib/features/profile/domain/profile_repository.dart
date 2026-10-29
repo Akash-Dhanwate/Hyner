@@ -3,4 +3,5 @@ import 'user_profile.dart';
 
 abstract interface class ProfileRepository {
   Future<UserProfile> synchronize(AccountIdentity identity);
+  Future<UserProfile> update(UserProfile current, ProfileDraft draft);
 }

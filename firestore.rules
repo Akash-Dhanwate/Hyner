@@ -26,6 +26,102 @@ service cloud.firestore {
         && request.resource.data.uid == resource.data.uid
         && request.resource.data.createdAt == resource.data.createdAt;
       allow delete: if false;
+
+      match /sales/{saleId} {
+        allow get: if owner(uid);
+        allow list: if owner(uid) && request.query.limit != null && request.query.limit <= 50;
+        // Sales are written only by the authenticated server checkout.
+        allow create: if false;
+        allow update, delete: if false;
+      }
+
+      match /products/{sku} {
+        function validProduct() {
+          let d = request.resource.data;
+          return d.keys().hasAll(['sku', 'name', 'nameKey', 'category', 'currency', 'costMinor', 'priceMinor', 'quantity', 'reorderLevel', 'archived', 'revision', 'lastMovementId', 'createdAt', 'updatedAt'])
+            && d.keys().hasOnly(['sku', 'name', 'nameKey', 'category', 'currency', 'costMinor', 'priceMinor', 'quantity', 'reorderLevel', 'archived', 'revision', 'lastMovementId', 'createdAt', 'updatedAt'])
+            && d.sku == sku && sku.matches('[A-Z0-9][A-Z0-9_-]{0,39}')
+            && d.name is string && d.name.size() > 0 && d.name.size() <= 120 && d.name.matches('.*[^ ].*')
+            && d.nameKey is string && d.nameKey == d.name.lower()
+            && d.category is string && d.category.size() <= 80
+            && d.currency in ['INR', 'USD', 'EUR', 'GBP']
+            && d.costMinor is int && d.costMinor >= 0 && d.costMinor <= 999999999999
+            && d.priceMinor is int && d.priceMinor >= 0 && d.priceMinor <= 999999999999
+            && d.quantity is int && d.quantity >= 0 && d.quantity <= 1000000000
+            && d.reorderLevel is int && d.reorderLevel >= 0 && d.reorderLevel <= 1000000000
+            && d.archived is bool && (!d.archived || d.quantity == 0)
+            && d.revision is int && d.revision > 0 && d.revision <= 1000000000
+            && d.lastMovementId is string && d.lastMovementId.matches('[A-Za-z0-9_-]{1,64}')
+            && d.createdAt is timestamp && d.updatedAt is timestamp
+            && d.updatedAt == request.time && d.updatedAt >= d.createdAt;
+        }
+
+        function matchingMovement(before, type) {
+          let id = request.resource.data.lastMovementId;
+          let path = /databases/$(database)/documents/users/$(uid)/products/$(sku)/movements/$(id);
+          let m = getAfter(path).data;
+          return m.type == type && !exists(path) && m.beforeQuantity == before
+            && m.afterQuantity == request.resource.data.quantity
+            && m.revision == request.resource.data.revision && m.createdAt == request.time
+            && (type != 'adjustment' || !existsAfter(/databases/$(database)/documents/users/$(uid)/sales/$(id)));
+        }
+
+        allow get: if owner(uid);
+        allow list: if owner(uid) && request.query.limit != null && request.query.limit <= 50;
+        allow create: if owner(uid)
+          && exists(/databases/$(database)/documents/users/$(uid))
+          && validProduct() && request.resource.data.createdAt == request.time
+          && request.resource.data.revision == 1 && !request.resource.data.archived
+          && matchingMovement(0, 'opening');
+        allow update: if owner(uid) && validProduct()
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.currency == resource.data.currency
+          && request.resource.data.revision == resource.data.revision + 1
+          && (
+            (request.resource.data.quantity == resource.data.quantity
+              && request.resource.data.lastMovementId == resource.data.lastMovementId
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'nameKey', 'category', 'costMinor', 'priceMinor', 'reorderLevel', 'archived', 'revision', 'updatedAt']))
+            || (!resource.data.archived && !request.resource.data.archived
+              && request.resource.data.quantity != resource.data.quantity
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['quantity', 'lastMovementId', 'revision', 'updatedAt'])
+              && matchingMovement(resource.data.quantity, 'adjustment'))
+          );
+        allow delete: if false;
+
+        match /movements/{operationId} {
+          function validMovement() {
+            let d = request.resource.data;
+            return d.keys().hasAll(['type', 'beforeQuantity', 'afterQuantity', 'delta', 'reason', 'actorUid', 'revision', 'createdAt'])
+              && d.keys().hasOnly(['type', 'beforeQuantity', 'afterQuantity', 'delta', 'reason', 'actorUid', 'revision', 'createdAt'])
+              && operationId.matches('[A-Za-z0-9_-]{1,64}')
+              && d.type in ['opening', 'adjustment']
+              && d.beforeQuantity is int && d.beforeQuantity >= 0 && d.beforeQuantity <= 1000000000
+              && d.afterQuantity is int && d.afterQuantity >= 0 && d.afterQuantity <= 1000000000
+              && d.delta is int && d.delta == d.afterQuantity - d.beforeQuantity
+              && d.reason is string && d.reason.size() > 0 && d.reason.size() <= 200 && d.reason.matches('.*[^ ].*')
+              && d.actorUid == uid && d.revision is int && d.revision > 0
+              && d.createdAt == request.time;
+          }
+
+          function matchesProduct() {
+            let path = /databases/$(database)/documents/users/$(uid)/products/$(sku);
+            let after = getAfter(path).data;
+            let d = request.resource.data;
+            return after.lastMovementId == operationId && after.quantity == d.afterQuantity
+              && after.revision == d.revision && after.updatedAt == request.time
+              && ((d.type == 'opening' && !exists(path) && d.beforeQuantity == 0 && d.revision == 1)
+                || (d.type == 'adjustment' && exists(path) && d.delta != 0
+                  && !get(path).data.archived
+                  && d.beforeQuantity == get(path).data.quantity
+                  && d.revision == get(path).data.revision + 1));
+          }
+
+          allow get: if owner(uid);
+          allow list: if owner(uid) && request.query.limit != null && request.query.limit <= 50;
+          allow create: if owner(uid) && validMovement() && matchesProduct();
+          allow update, delete: if false;
+        }
+      }
     }
 
     match /{document=**} {

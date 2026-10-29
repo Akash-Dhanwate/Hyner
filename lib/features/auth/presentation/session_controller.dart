@@ -131,6 +131,22 @@ class SessionController extends Notifier<SessionState> {
     await _onAccount(user);
   }
 
+  Future<void> updateProfile(ProfileDraft draft) async {
+    final current = state.profile;
+    if (current == null || !state.isAuthenticated) {
+      throw const AppFailure(
+        FailureKind.permission,
+        'Sign in again before editing your profile.',
+      );
+    }
+    final updated = await ref
+        .read(dependenciesProvider)
+        .profiles
+        .update(current, draft);
+    if (_disposed || state.profile?.uid != current.uid) return;
+    state = SessionState(SessionStatus.signedIn, profile: updated);
+  }
+
   Future<void> signOut() async {
     if (state.busy || _signingOut) return;
     _signingOut = true;

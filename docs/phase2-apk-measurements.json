@@ -1,0 +1,53 @@
+{
+  "verified_date": "2026-10-23",
+  "phase": "2: Inventory",
+  "build_number": 6,
+  "firebase_configuration_bundled": true,
+  "flutter_tests_passed": 80,
+  "rules_tests_passed": 51,
+  "widget_visual_review_images": 5,
+  "device_installation": "NOT TESTED",
+  "live_inventory_reads_and_writes": "NOT TESTED; owner must publish rules and enable indexes first",
+  "profile_apks": [
+    {
+      "file": "build/app/outputs/flutter-apk/app-arm64-v8a-profile.apk",
+      "phone_test_file": "build/deliverables/Hyner-build6-arm64.apk",
+      "bytes": 35326577,
+      "sha256": "682cb24430ee124afd6340809d96a790c1608c1d7152cb877804ebb14f81ea6a",
+      "abi": "arm64-v8a",
+      "package": "com.example.hyner",
+      "version_code": 2006,
+      "version_name": "1.1.0",
+      "signature_verified": true,
+      "signing_sha1_matches_existing_app": true,
+      "native_firebase_configuration_matches": true,
+      "compiled_dart_firebase_configuration_matches": true,
+      "known_test_account_fixtures_absent": true,
+      "aot": true,
+      "dart_debug_kernel": false,
+      "vulkan_debug_validation_layer": false,
+      "material_icons_uncompressed_bytes": 6176,
+      "reduction_from_original_universal_debug_percent": 82.5
+    },
+    {
+      "file": "build/app/outputs/flutter-apk/app-armeabi-v7a-profile.apk",
+      "phone_test_file": "build/deliverables/Hyner-build6-arm32.apk",
+      "bytes": 32901439,
+      "sha256": "98dc4083e3c0edf78dc350dea2b34d51dfff13a5ed01724fb0c2764b718579a7",
+      "abi": "armeabi-v7a",
+      "package": "com.example.hyner",
+      "version_code": 1006,
+      "version_name": "1.1.0",
+      "signature_verified": true,
+      "signing_sha1_matches_existing_app": true,
+      "native_firebase_configuration_matches": true,
+      "compiled_dart_firebase_configuration_matches": true,
+      "known_test_account_fixtures_absent": true,
+      "aot": true,
+      "dart_debug_kernel": false,
+      "vulkan_debug_validation_layer": false,
+      "material_icons_uncompressed_bytes": 6176,
+      "reduction_from_original_universal_debug_percent": 83.7
+    }
+  ]
+}

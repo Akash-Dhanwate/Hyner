@@ -1,0 +1,25 @@
+{
+  "verified_date": "2026-10-27",
+  "phase": "4: Purchases, customer history and reports",
+  "build_number": 2011,
+  "version_name": "1.3.3",
+  "automated_test_status": {
+    "flutter_analysis": "PASSED; no issues found",
+    "flutter_tests": "NOT RUN",
+    "patch_whitespace_check": "PASSED",
+    "android_profile_build": "PASSED",
+    "device_installation": "NOT TESTED"
+  },
+  "profile_apk": {
+    "file": "build/deliverables/Hyner-build2011-arm64.apk",
+    "bytes": 36439507,
+    "sha256": "6ac7c741542b981fc16f560c8455edc44e313a956167fd33b3ad95f9ed253b33",
+    "abi": "arm64-v8a",
+    "package": "com.example.hyner",
+    "version_code": 4011,
+    "version_name": "1.3.3",
+    "signature_verified": true,
+    "signing_sha256": "abdc309aa793adb3e76226fd8a6a980a00bdc393022c95ef8956c8a8d10a8517",
+    "signing_matches_build9": true
+  }
+}

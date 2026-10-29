@@ -36,9 +36,10 @@ certificate. Renaming a registered package later requires another app registrati
 5. For separate development and production installations, register separate
    package identifiers and use separate Firebase projects/configuration files.
 
-### 2. Create the Firebase project on Spark
+### 2. Create the Firebase project
 
-Why: Firebase Authentication and Firestore need an actual project owned by you.
+Why: Google sign-in uses Firebase Authentication. The app's business records
+are local; Blaze and Cloud Functions are not required.
 
 1. Open [Firebase Console](https://console.firebase.google.com/) and sign in.
 2. Click **Create a project** (or **Add project**).
@@ -46,13 +47,15 @@ Why: Firebase Authentication and Firestore need an actual project owned by you.
    your development environment. Review the console-generated project ID.
 4. Decline optional AI/Analytics integrations if prompted; they are not used here.
 5. Complete Google's project-creation prompts using your account.
-6. On the project overview, verify the plan is **Spark**. Do not attach a billing
-   account or select an upgrade.
+6. The local register can use the Spark plan for Google Authentication. Do not
+   upgrade to Blaze for Sales or UPI; that would only be needed for a future
+   server-side Cloud Function feature.
 
-Phase 1 needs only Google Authentication and one standard Firestore database
-within the Spark quotas. Cloud Functions, Cloud Storage, SMS authentication, and
-paid backup features are not needed. Check the current
-[Firebase pricing page](https://firebase.google.com/pricing) before adding services.
+The app needs Google Authentication. It does not write business records to
+Firestore. An existing Firestore database is read once to import the signed-in
+owner's old product catalogue and stock history; a new installation can use
+local inventory without creating a Firestore database. Cloud Storage, SMS
+authentication, paid backup and payment processing are not used.
 
 ### 3. Obtain debug signing fingerprints
 
@@ -125,28 +128,17 @@ The importer writes an ignored `config/firebase.development.json` and never prin
 its API key. Firebase client API keys are not service-account/private keys;
 Firestore rules enforce database authorization.
 
-### 6. Create Firestore and publish the tested rules
+### 6. Optional: keep the existing Firestore database available for import
 
-Why: The app requires a real database, and local rule tests do not publish rules
-to your Firebase project.
+This step is only for existing users who want to copy their old cloud inventory
+and stock history to the device. New local register use does not require
+Firestore or a rules deployment.
 
-1. In Firebase Console, open **Build → Firestore Database → Create database**.
-2. Select **Standard edition** and the default database, if prompted.
-3. Select the region appropriate to where the business operates. Review this
-   carefully; the database location cannot be changed in place later.
-4. Choose **Production mode** to start with restricted access. Do not use open
-   test-mode rules.
-5. Complete database creation.
-6. Open the database's **Rules** tab.
-7. Replace the editor contents with the complete project `firestore.rules` file.
-8. Click **Publish** and confirm the console reports successful publication.
-9. No collections need manual creation. The first authenticated profile
-   transaction creates `users/{firebaseUid}`.
-
-The six fields are `uid`, `displayName`, `email`, `photoUrl`, `createdAt`, and
-`lastLoginAt`. User documents use Firebase UID as their document identifier.
-Creation time is immutable. Timestamps are server-generated. Unknown collections,
-collection listing, cross-user reads/writes, and profile deletion are denied.
+Keep the existing project database and owner product read rules in place until
+the first inventory screen completes the import. If the app displays an import
+warning, confirm the account can read its own `users/{uid}/products` documents
+and `movements` subcollections, then refresh Inventory. The app does not update
+or delete the source data.
 
 ### 7. Run the configured application
 

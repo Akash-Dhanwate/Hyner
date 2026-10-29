@@ -63,7 +63,7 @@ try {
   if (!ready) throw new Error(`Emulator did not become ready:\n${output}`);
   console.log('Running security tests against the isolated local demo project.');
   const result = await new Promise((resolve, reject) => {
-    const tests = spawn(process.execPath, ['--test', 'rules_tests/firestore.test.mjs'], { cwd: root, stdio: 'inherit', env: { ...process.env, FIRESTORE_EMULATOR_HOST: '127.0.0.1:8080' } });
+    const tests = spawn(process.execPath, ['--test', '--test-concurrency=1', 'rules_tests/firestore.test.mjs', 'functions/test/sales.test.mjs'], { cwd: root, stdio: 'inherit', env: { ...process.env, FIRESTORE_EMULATOR_HOST: '127.0.0.1:8080' } });
     tests.once('error', reject);
     tests.once('exit', (code) => resolve(code ?? 1));
   });

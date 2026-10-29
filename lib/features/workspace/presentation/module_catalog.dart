@@ -6,13 +6,15 @@ class WorkspaceModule {
     this.path,
     this.icon,
     this.description,
-    this.planned,
-  );
+    this.planned, {
+    this.available = false,
+  });
   final String name;
   final String path;
   final IconData icon;
   final String description;
   final List<String> planned;
+  final bool available;
 }
 
 const businessModules = [
@@ -22,13 +24,15 @@ const businessModules = [
     Icons.inventory_2_outlined,
     'A home for every item in your business.',
     ['Product catalogue', 'Stock visibility', 'Low-stock notifications'],
+    available: true,
   ),
   WorkspaceModule(
     'Sales',
     '/sales',
     Icons.receipt_long_outlined,
     'Keep everyday sales clearly organised.',
-    ['Sales records', 'Customer billing', 'Returns'],
+    ['Build a bill', 'Per-bill prices', 'Stock deductions', 'Saved bills'],
+    available: true,
   ),
   WorkspaceModule(
     'Purchases',
@@ -36,6 +40,15 @@ const businessModules = [
     Icons.shopping_bag_outlined,
     'Keep track of what comes into your business.',
     ['Purchase records', 'Supplier details', 'Purchase returns'],
+    available: true,
+  ),
+  WorkspaceModule(
+    'Expenses',
+    '/expenses',
+    Icons.payments_outlined,
+    'Track operating costs alongside purchase records.',
+    ['Rent and payroll', 'Utilities and transport', 'Expense history'],
+    available: true,
   ),
   WorkspaceModule(
     'Customers',
@@ -43,6 +56,7 @@ const businessModules = [
     Icons.people_outline_rounded,
     'A clearer picture of your customer relationships.',
     ['Customer directory', 'Account history', 'Payment records'],
+    available: true,
   ),
   WorkspaceModule(
     'Reports',
@@ -50,6 +64,15 @@ const businessModules = [
     Icons.bar_chart_rounded,
     'Turn your business activity into useful insights.',
     ['Business summaries', 'Profit and loss', 'Sales insights'],
+    available: true,
+  ),
+  WorkspaceModule(
+    'WhatsApp updates',
+    '/whatsapp',
+    Icons.chat_outlined,
+    'Prepare product updates and customer follow-ups.',
+    ['Opt-in customer list', 'Manual click-to-chat', 'Payment follow-up queue'],
+    available: true,
   ),
 ];
 

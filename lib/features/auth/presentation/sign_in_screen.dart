@@ -40,7 +40,7 @@ class SignInScreen extends ConsumerWidget {
                 Text('Welcome to Hyner', style: theme.textTheme.headlineMedium),
                 const SizedBox(height: 12),
                 Text(
-                  'Sign in to create your workspace or pick up where you left off.',
+                  'Sign in to open your register. Products and bills are saved on this device.',
                   style: theme.textTheme.bodyLarge?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),

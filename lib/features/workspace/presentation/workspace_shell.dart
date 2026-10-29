@@ -21,6 +21,7 @@ class WorkspaceShell extends ConsumerWidget {
     '/dashboard' => 0,
     '/inventory' => 1,
     '/sales' => 2,
+    '/sales/history' => 2,
     '/reports' => 3,
     _ => 4,
   };
@@ -180,7 +181,9 @@ class _NavigationList extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-            selected: module.path == location,
+            selected:
+                module.path == location ||
+                location.startsWith('${module.path}/'),
             selectedTileColor: Theme.of(context).colorScheme.primaryContainer
                 .withValues(alpha: .5),
             leading: Icon(module.icon, size: 22),

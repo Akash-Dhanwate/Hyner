@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../features/profile/domain/user_profile.dart';
@@ -32,11 +34,15 @@ class AccountAvatar extends StatelessWidget {
             dimension: radius * 2,
             child: profile.photoUrl == null
                 ? fallback
-                : Image.network(
-                    profile.photoUrl!,
+                : Image(
+                    image: ResizeImage(
+                      profile.photoUrl!.startsWith('/')
+                          ? FileImage(File(profile.photoUrl!))
+                          : NetworkImage(profile.photoUrl!),
+                      width: imagePixels,
+                      height: imagePixels,
+                    ),
                     fit: BoxFit.cover,
-                    cacheWidth: imagePixels,
-                    cacheHeight: imagePixels,
                     loadingBuilder: (context, child, progress) =>
                         progress == null ? child : fallback,
                     errorBuilder: (context, error, stack) => fallback,

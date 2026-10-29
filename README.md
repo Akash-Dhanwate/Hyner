@@ -1,15 +1,20 @@
 # Hyner
 
-A Flutter application foundation for an Android business workspace. Phase 1
-contains Google/Firebase account integration, profile synchronization, navigation,
-branding, and appearance settings. Business modules are clearly marked placeholders.
+An Android business register built with Flutter. Firebase is used for Google
+sign-in; products, stock history, customers, supplier purchases, bills, paid
+status and UPI details live in a local SQLite database on the device. UPI QR
+codes prefill the bill's exact INR amount. Customers pay through their own UPI
+app; the owner checks receipt and marks the bill paid in Hyner. Hyner does not
+process or verify payments. Customer bill history, supplier returns and currency-separated
+business reports are also available locally. There is no cloud sync or backup
+in this version.
 
-**Phase 1 is not complete:** configured phone-test APKs now include the supplied
-Firebase registration. The user reports successful login and workspace access;
-restart persistence, live account-isolation checks, and full Android acceptance
-remain pending. An unconfigured debug build shows welcome and
-sign-in with an explicit setup notice. It never creates a fake account or opens
-protected routes.
+The current source saves new business records on-device. On first inventory
+access it attempts a one-time import of the signed-in owner's previous product
+catalogue and stock history from Firestore. Existing cloud Sales were not
+available in the prior build because the checkout function had not been
+deployed. This local-first UPI flow does not require Blaze or a Cloud Function.
+Profile editing and additional sign-in methods are deferred at the owner's request.
 
 ## Local development
 
@@ -44,23 +49,16 @@ application ID. No client identifiers or API keys are invented. The native Googl
 Services Gradle plugin and Flutter initialization use that same registration. Project
 configuration and signing credentials are excluded from Git.
 
-## Smaller phone test builds
+## Current installable build
 
-For phone performance evaluation, use the precompiled profile APKs instead of
-the original 201.8 MB universal debug APK:
-
-```sh
-./tool/flutterw build apk --profile --target-platform android-arm,android-arm64 --split-per-abi --build-number 5 --dart-define-from-file=config/firebase.development.json
-```
-
-The verified ARM64 APK is **34.4 MB** and ARM32 is **32.0 MB**. They are local
-profile builds containing the actual Firebase development configuration.
-See [performance results and instructions](docs/PERFORMANCE.md).
-Current manually installable copies are `build/deliverables/Hyner-build5-arm64.apk`
-and `build/deliverables/Hyner-build5-arm32.apk`. Build 5 preserves section history
-for Android Back, dismisses open menus first, avoids duplicate selections, and
-clears protected history on logout. All 47 Flutter tests and analysis pass.
-Native gestures and installation of build 5 are NOT TESTED on a phone.
+- `build/deliverables/Hyner-build2011-arm64.apk` — version 1.3.3, Android
+  version code 4011, package `com.example.hyner`, ARM64. Includes local
+  Purchases, customer account history, and Reports.
+- It is signed with the same development certificate as build 9 and can be
+  installed as an update. **NOT TESTED on a physical phone.**
+- Build 9 (`Hyner-build9-arm64.apk`) predates local SQLite bills, manual payment
+  status and UPI QR. No Cloud Function deployment or Blaze upgrade is needed
+  for the current flow. See [local Sales and UPI setup](docs/PHASE_3_SETUP.md).
 
 ## Security tests
 
@@ -88,12 +86,16 @@ assets/fonts/             Bundled Manrope font and its OFL license
 lib/app/                  Bootstrap, dependencies, configuration, routing, theme
 lib/core/                 Shared error mapping and reusable widgets
 lib/features/auth/        Google/Firebase adapter and session controller
-lib/features/profile/     Profile model, Firestore adapter, account screen
+lib/features/profile/     Profile model, local adapter, account screen
+lib/features/inventory/   Product/stock domain, SQLite adapter and legacy import
+lib/features/sales/       Local bills, stock deductions, payment status and UPI QR
+lib/features/customers/   On-device customer directory and bill history
+lib/features/purchases/   Supplier directory, purchase records and returns
+lib/features/reports/     Local sales, payment, stock and purchase summaries
 lib/features/onboarding/  Splash and welcome
 lib/features/dashboard/   Workspace landing screen
-lib/features/settings/    Persisted light/dark/device appearance
-lib/features/workspace/   Navigation and shared placeholder presentation
-lib/features/*/           Presentation-only business module entry points
+lib/features/settings/    Appearance and local UPI QR configuration
+lib/features/workspace/   Business module navigation
 test/                     Unit and widget tests with isolated test repositories
 rules_tests/              Firestore authorization and validation tests
 tool/                     Flutter wrapper, configuration, rendering, rule runner
@@ -105,12 +107,18 @@ docs/                     Architecture, setup, testing, and current status
 - [Architecture and scope](docs/ARCHITECTURE.md)
 - [Firebase, Android identity, and signing setup](docs/SETUP.md)
 - [Automated results and device test procedure](docs/TESTING.md)
-- [Phase 1 status](docs/PHASE_1_STATUS.md)
+- [Phase 1 checkpoint](docs/PHASE_1_STATUS.md)
+- [Phase 2 Inventory scope](docs/PHASE_2_INVENTORY.md)
+- [Inventory Firebase setup and device checklist](docs/PHASE_2_SETUP.md)
+- [Phase 2 validation](docs/PHASE_2_RESULTS.md)
+- [Sales implementation and validation](docs/PHASE_3_SALES.md)
+- [Sales Firebase setup and phone checklist](docs/PHASE_3_SETUP.md)
+- [Purchases, customer history, and reports](docs/PHASE_4_PURCHASES_REPORTS.md)
 - [Verified APK and debug certificate fingerprints](docs/APK_BUILD.md)
 - [Smaller phone APKs and performance verification](docs/PERFORMANCE.md)
 - [UI review images](docs/previews/README.md)
 
 Production builds require real production configuration, a final application ID,
 and a locally held release signing key. Release builds never use debug signing.
-No service-account keys, passwords, business data, paid services, or Phase 2
-features have been added.
+No service-account keys, passwords, business data, or paid services have been added.
+Authentication providers and profile fields were not changed.

@@ -1,0 +1,32 @@
+{
+  "verified_date": "2026-10-26",
+  "phase": "3: Sales billing-first update",
+  "build_number": 9,
+  "version_name": "1.3.1",
+  "automated_test_status": {
+    "flutter_targeted": "44 Sales, navigation, and routing tests passed",
+    "flutter_analysis": "PASSED; no issues found",
+    "sales_fixture_render": "PASSED",
+    "cloud_function": "NOT RUN during this resume; 15 emulator cases are present in functions/test/sales.test.mjs",
+    "firestore_rules": "NOT RUN during this resume"
+  },
+  "device_installation": "NOT TESTED; no Android device was connected",
+  "live_sales_reads_and_writes": "NOT TESTED; publish rules and deploy createSale",
+  "profile_apks": [
+    {
+      "phone_test_file": "build/deliverables/Hyner-build9-arm64.apk",
+      "bytes": 45521959,
+      "sha256": "273d48d3d85b128abaaf3e0bb33c76b5041fe9dc03c8db0ab2f9ab6e4cb5a459",
+      "abi": "arm64-v8a",
+      "package": "com.example.hyner",
+      "version_code": 2009,
+      "version_name": "1.3.1",
+      "signature_verified": true,
+      "signing_sha256": "abdc309aa793adb3e76226fd8a6a980a00bdc393022c95ef8956c8a8d10a8517",
+      "signing_matches_build8": true,
+      "zip_alignment_verified": true,
+      "aot_library_present": true,
+      "firebase_configuration_rechecked": false
+    }
+  ]
+}

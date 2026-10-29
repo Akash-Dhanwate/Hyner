@@ -69,8 +69,9 @@ void main() {
       final container = await mount(tester, restored: true);
       final router = container.read(routerProvider);
       for (final entry in [
-        ('/inventory', 'A little more is on the way'),
-        ('/sales', 'A little more is on the way'),
+        ('/inventory', 'No products yet'),
+        ('/sales', 'No products added yet.'),
+        ('/sales/history', 'No sales yet'),
         ('/purchases', 'A little more is on the way'),
         ('/customers', 'A little more is on the way'),
         ('/reports', 'A little more is on the way'),
@@ -129,10 +130,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(await tester.binding.handlePopRoute(), isTrue);
       await tester.pumpAndSettle();
-      expect(
-        find.text('A home for every item in your business.'),
-        findsOneWidget,
-      );
+      expect(find.text('No products yet'), findsOneWidget);
       expect(
         tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex,
         1,
@@ -273,6 +271,10 @@ void main() {
     expect(find.text('Hello, Alice.'), findsOneWidget);
     expect(router.canPop(), isFalse);
     await tester.tap(find.text('Inventory').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Sales').last);
+    await tester.pumpAndSettle();
+    router.push('/reports');
     await tester.pumpAndSettle();
     await tester.ensureVisible(find.text('Back to dashboard'));
     await tester.tap(find.text('Back to dashboard'));
@@ -491,6 +493,7 @@ void main() {
         '/dashboard',
         '/inventory',
         '/sales',
+        '/sales/history',
         '/purchases',
         '/customers',
         '/reports',

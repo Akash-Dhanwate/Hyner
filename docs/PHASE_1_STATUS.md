@@ -1,6 +1,9 @@
 # Hyner — Phase 1 status
 
-**Status: foundation implemented; acceptance incomplete.**
+**Historical checkpoint, 20 October 2026.** On 23 October, the owner reported the
+app working and explicitly authorized Phase 2 Inventory. This does not mark
+unperformed device/cloud checks below as passed. Current work and results are
+in `PHASE_2_INVENTORY.md` and `PHASE_2_RESULTS.md`.
 
 ## Implemented
 
@@ -93,4 +96,4 @@ No inventory, sales, purchasing, billing, customer management, reporting,
 payments, supplier, return, notification, or analytics business logic has been
 implemented. No business collections were added. After Phase 1 acceptance,
 select the next individual feature and apply planning, implementation, testing,
-fixing, and verification before any later feature. Phase 2 has not started.
+fixing, and verification before any later feature. Phase 2 Inventory started on 23 October 2026 at the owner’s request; no other business module has started.

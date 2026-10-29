@@ -1,5 +1,38 @@
 # Phone build size and performance
 
+## Current local register APK — 27 October 2026
+
+Build 2011 / version 1.3.3: ARM64 **36,439,507 bytes (36.4 MB)**. File:
+`build/deliverables/Hyner-build2011-arm64.apk`. This profile APK includes local
+Purchases, customer account history and Reports. Its package, ARM64 ABI, version
+and debug signature matching build 9 were verified. SHA-256 and validation
+status are in `phase4-apk-measurements.json`.
+Physical-device installation, speed, installed size, memory and battery remain
+NOT TESTED. This is a local profile build, not a privately signed production
+release.
+
+## Previous Sales APK — 26 October 2026
+
+Build 9 / version 1.3.1: ARM64 **45,521,959 bytes (45.5 MB)**. File:
+`build/deliverables/Hyner-build9-arm64.apk`. Its package/version, intended ABI,
+existing signing certificate, zip alignment and SHA-256 were checked; see
+`phase3-apk-measurements.json`. This development update has no ARM32 copy.
+Physical-device speed, installed size, memory and battery behavior remain
+NOT TESTED. The artifact is a local profile build, not a privately signed
+production release.
+
+## Historical Inventory APKs — 23 October 2026
+
+Build 6 / version 1.1.0: ARM64 **35,326,577 bytes (35.3 MB)**;
+ARM32 **32,901,439 bytes (32.9 MB)**. Files are
+`build/deliverables/Hyner-build6-arm64.apk` and `Hyner-build6-arm32.apk`.
+Signatures, single-ABI AOT contents, Firebase configuration and copied hashes
+passed verification. Exact records are in `phase2-apk-measurements.json`.
+Device speed, installed size, memory and battery behavior remain NOT TESTED.
+The original 201.8 MB debug artifact is not the current phone build.
+
+## Historical build-5 measurements
+
 Updated 20 October 2026. The original universal debug APK is not a production
 size or performance baseline. New AOT profile APKs were built for phone testing.
 The current profile APKs contain the supplied Firebase development configuration.
